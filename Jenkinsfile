@@ -22,33 +22,25 @@ pipeline {
       steps {
         script {
           sh 'printenv'
-          def options = ""
-          def prefix = ""
-          if (params.BROWSER == "chrome") {
-            options = '-DchromeOptions="--headless --no-sandbox --disable-setuid-sandbox --disable-gpu --disable-software-rasterizer --remote-debugging-port=9222 --disable-infobars"'
-            prefix = 'xvfb-run --server-args="-screen 0 1920x1080x24" --server-num=99'
-          } else if (params.BROWSER == "firefox") {
-            options = '-DchromeOptions="-headless"'
-            prefix = 'xvfb-run --server-args="-screen 0 1920x1080x24" --server-num=99'
+          withCredentials([usernamePassword(credentialsId: 'sonarqube', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+            def sonar_opts = "\"-Dsonar.login=${USER}\" \"-Dsonar.password=${PASS}\""
+            sh """
+              mvn -B -T4 clean package \
+                spotbugs:spotbugs pmd:pmd dependency-check:check \
+                -Dsonar.java.spotbugs.reportPaths=target/spotbugsXml.xml \
+                -Dsonar.java.pmd.reportPaths=target/pmd.xml \
+                ${sonar_opts} \
+                sonar:sonar
+            """
           }
-          sh """
-            ${prefix} mvn -B -T4 clean package \
-              -Dbrowser=\"${params.BROWSER}\" \
-              ${options} \
-              -DskipTests=${params.SKIP_TESTS} \
-              spotbugs:spotbugs pmd:pmd dependency-check:check \
-              -Dsonar.java.spotbugs.reportPaths=target/spotbugsXml.xml \
-              -Dsonar.java.pmd.reportPaths=target/pmd.xml \
-              sonar:sonar
-          """
           if (params.CREATE_RELEASE == "true"){
             echo "creating release ${VERSION} and uploading it to ${REPO_URL}"
             // upload to repo
             withCredentials([usernamePassword(credentialsId: 'cloudtrust-cicd-artifactory-opaque', usernameVariable: 'USR', passwordVariable: 'PWD')]){
               sh """
-                cd target
+                cd "target"
                 mv "${APP}"-?.?.?*.tar.gz "${APP}-${params.VERSION}.tar.gz"
-                curl -k -u"${USR}:${PWD}" -T "${APP}-${params.VERSION}.tar.gz" --keepalive-time 2 "${REPO_URL}/${APP}-${params.VERSION}.tar.gz"
+                curl --fail -k -u"${USR}:${PWD}" -T "${APP}-${params.VERSION}.tar.gz" --keepalive-time 2 "${REPO_URL}/${APP}-${params.VERSION}.tar.gz"
               """
             }
             def git_url = "${env.GIT_URL}".replaceFirst("^(http[s]?://www\\.|http[s]?://|www\\.)","")
