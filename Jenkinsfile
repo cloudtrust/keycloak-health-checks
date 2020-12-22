@@ -39,7 +39,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'cloudtrust-cicd-artifactory-opaque', usernameVariable: 'USR', passwordVariable: 'PASSWD')]){
               sh """
                 cd "target"
-                mv "${APP}"-?.?.?*.tar.gz "${APP}-${params.VERSION}.tar.gz"
+                mv "${APP}"-*.tar.gz "${APP}-${params.VERSION}.tar.gz"
                 curl --fail -k -u"${USR}:${PASSWD}" -T "${APP}-${params.VERSION}.tar.gz" --keepalive-time 2 "${REPO_URL}/${APP}-${params.VERSION}.tar.gz"
               """
             }
