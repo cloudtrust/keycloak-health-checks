@@ -10,7 +10,7 @@
     <parent>
         <groupId>io.cloudtrust</groupId>
         <artifactId>kc-cloudtrust-module</artifactId>
-        <version>8.0.1</version>
+        <version>14.0.0</version>
     </parent>
 
     <artifactId>keycloak-health-checks</artifactId>
@@ -23,11 +23,9 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <!-- dependency versions -->
-        <lombok.version>1.18.4</lombok.version>
+        <lombok.version>1.18.16</lombok.version>
 
-        <keycloak.version>7.0.0</keycloak.version>
         <keycloak.versionedArtifactName>keycloak-${keycloak.version}</keycloak.versionedArtifactName>
-        <infinispan.version>9.3.1.Final</infinispan.version>
     </properties>
 
     <dependencies>
@@ -51,7 +49,6 @@
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-core</artifactId>
-            <version>${infinispan.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -80,7 +77,6 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.2.1</version>
                 <configuration>
                     <format>XML</format>
                 </configuration>

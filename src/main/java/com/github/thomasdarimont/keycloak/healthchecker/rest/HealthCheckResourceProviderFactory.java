@@ -22,14 +22,16 @@ public class HealthCheckResourceProviderFactory implements RealmResourceProvider
 
     @Override
     public void init(Scope config) {
+        // Nothing to do
     }
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
+        // Nothing to do
     }
 
     @Override
     public void close() {
+        // Nothing to do
     }
-
 }
