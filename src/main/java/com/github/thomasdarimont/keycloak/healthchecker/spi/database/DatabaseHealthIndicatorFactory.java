@@ -8,7 +8,7 @@ import org.keycloak.models.KeycloakSessionFactory;
 
 public class DatabaseHealthIndicatorFactory implements HealthIndicatorFactory {
 
-    public final static String ID = "database-health";
+    public static final String ID = "database-health";
 
     private Config.Scope config;
 
@@ -24,7 +24,7 @@ public class DatabaseHealthIndicatorFactory implements HealthIndicatorFactory {
 
     @Override
     public void postInit(KeycloakSessionFactory factory) {
-
+        //NOOP
     }
 
     @Override

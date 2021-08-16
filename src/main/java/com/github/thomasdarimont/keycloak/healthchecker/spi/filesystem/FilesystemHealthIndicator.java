@@ -10,7 +10,7 @@ class FilesystemHealthIndicator extends AbstractHealthIndicator {
 
     private static final String DEFAULT_PATH = ".";
 
-    private static final long DEFAULT_THRESHOLD_IN_BYTES = 1024 * 1024 * 1024; // 1 GB
+    private static final long DEFAULT_THRESHOLD_IN_BYTES = 1024 * 1024 * 1024L; // 1 GB
 
     private final String path;
 
@@ -25,8 +25,8 @@ class FilesystemHealthIndicator extends AbstractHealthIndicator {
     @Override
     public HealthStatus check() {
 
-        File path = new File(this.path);
-        long freeBytes = path.getFreeSpace();
+        File filespace = new File(this.path);
+        long freeBytes = filespace.getFreeSpace();
 
         boolean belowThreshold = freeBytes > thresholdInBytes;
 
