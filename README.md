@@ -2,9 +2,15 @@
 
 A collection of health-checks for Keycloak subsystems.
 
+## Supported Checks
+
+1. Filesystem (Instance Level)
+1. Database (Instance Level)
+1. Infinispan Cluster state (Instance Level)
+
 ## Requirements
 
-* Keycloak 7.0.0 Multi-token Prototype release
+* Keycloak 17.0.1
 
 ## Build
 
@@ -19,6 +25,19 @@ Use the `install.sh` script available in the tar.gz package:
 
 Use the `install.sh` script available in the tar.gz package:
 `./install.sh /path/to/keycloak/home -u`   
+
+## Configuration
+
+The following health-check providers are supported: 
+- `infinispan`
+- `database`
+- `ldap`
+- `filesystem`
+
+To disable the `filesystem-health` check, one can use the following config setting in keycloak.conf
+```
+spi-health-filesystem-health-enabled=false
+```
 
 ## Running example
 
