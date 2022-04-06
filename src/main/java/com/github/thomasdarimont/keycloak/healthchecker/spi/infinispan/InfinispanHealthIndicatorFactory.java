@@ -32,7 +32,6 @@ public class InfinispanHealthIndicatorFactory implements HealthIndicatorFactory 
         //NOOP
     }
 
-
     @Override
     public String getId() {
         return ID;

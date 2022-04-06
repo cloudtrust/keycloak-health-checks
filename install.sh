@@ -6,24 +6,26 @@
 
 set -eE
 MODULE_DIR=$(dirname $0)
-TARGET_DIR=${MODULE_DIR}/target
-LIBRARY_DIR=${MODULE_DIR}/lib-modules
+TARGET_DIR=$MODULE_DIR/target
+[ -z "$WINDIR" ] && KC_EXE=kc.sh || KC_EXE=kc.bat
 
 usage ()
 {
     echo "usage: $0 keycloak_path [-c]"
 }
 
+abort_usage_keycloak()
+{
+  echo "Invalid keycloak path"
+  usage
+  exit 1
+}
 
 init()
 {
-    # deps
-    [[ $(xmlstarlet --version) ]] || { echo >&2 "Requires xmlstarlet"; exit 1; }
-
     #optional args
-    argv__CLUSTER=0;
     argv__UNINSTALL=0
-    getopt_results=$(getopt -s bash -o cu --long cluster,uninstall -- "$@")
+    getopt_results=$(getopt -s bash -o u --long uninstall -- "$@")
 
     if test $? != 0
     then
@@ -38,11 +40,6 @@ init()
             -u|--uninstall)
                 argv__UNINSTALL=1
                 echo "--delete set. will remove plugin"
-                shift
-                ;;
-            -c|--cluster)
-                argv__CLUSTER=1
-                echo "--cluster set. Will edit cluster config"
                 shift
                 ;;
             --)
@@ -64,19 +61,11 @@ init()
         exit 1
     fi
     argv__KEYCLOAK="$1"
+    [ -d $argv__KEYCLOAK ] && [ -d $argv__KEYCLOAK/bin ] && [ -d $argv__KEYCLOAK/providers ] && [ -d $argv__KEYCLOAK/conf ] || abort_usage_keycloak
     # optional args
-    CONF_FILE=""
-    if [[ "$argv__CLUSTER" -eq 1 ]]; then
-        CONF_FILE=$argv__KEYCLOAK/standalone/configuration/standalone-ha.xml
-    else
-        CONF_FILE=$argv__KEYCLOAK/standalone/configuration/standalone.xml
-    fi
-    echo $CONF_FILE
-    MODULE_NAME=$(xmlstarlet sel -N oe="urn:jboss:module:1.3" -t -v '/oe:module/@name' -n $MODULE_DIR/module.xml)
-    MODULE=${MODULE_NAME##*.}
-    JAR_PATH=`find $TARGET_DIR/ -type f -name "*.jar" -not -name "*sources.jar" | grep -v "archive-tmp"`
+    CONF_FILE=$argv__KEYCLOAK/conf/keycloak.conf
+    JAR_PATH=`find ${TARGET_DIR} -type f -name "*.jar" -not -name "*sources.jar" | grep -v "archive-tmp"`
     JAR_NAME=`basename $JAR_PATH`
-    MODULE_PATH=${MODULE_NAME//./\/}/main
 }
 
 init_exceptions()
@@ -87,22 +76,32 @@ init_exceptions()
     Main__ParameterException=2
 }
 
+del_configuration()
+{
+  if [[ ! -z "$1" ]] ; then
+    sed -i "/^$1=/d" ${CONF_FILE}
+  fi
+}
+
+add_configuration()
+{
+  if [[ ! -z "$1" ]] ; then
+    sed -i "/^$1=/d" ${CONF_FILE}
+    echo "$1=$2" >> ${CONF_FILE}
+  fi
+}
+
 cleanup()
 {
     #clean dir structure in case of script failure
     echo "cleanup..."
-    xmlstarlet ed -L -N c="urn:jboss:domain:keycloak-server:1.1" -d "/_:server/_:profile/c:subsystem/c:providers/c:provider[text()='module:$MODULE_NAME']" $CONF_FILE
-    sed -i "$ s/,$MODULE$//" $argv__KEYCLOAK/modules/layers.conf
-    sed -i "$ s/\([=,]\)$MODULE,/\1/" $argv__KEYCLOAK/modules/layers.conf
-    rm -rf $argv__KEYCLOAK/modules/system/layers/$MODULE
+
+    del_configuration spi-health-database-health-enabled
+    del_configuration spi-health-filesystem-health-enabled
+    del_configuration spi-health-infinispan-health-enabled
+    rm -rf $argv__KEYCLOAK/providers/$JAR_NAME
+
     echo "done"
-}
-copy_lib()
-{
-    LIB_PATH=$1
-    LIB_NAME=$2
-    mkdir -p $argv__KEYCLOAK/modules/system/layers/$MODULE/${LIB_PATH}/main
-    cp ${LIBRARY_DIR}/${LIB_NAME}/* $argv__KEYCLOAK/modules/system/layers/$MODULE/${LIB_PATH}/main
 }
 
 Main__interruptHandler()
@@ -132,7 +131,7 @@ trap Main__exitHandler ERR
 
 Main__main()
 {
-    # init scipt temporals
+    # init script temporals
     init_exceptions
     init "$@"
     if [[ "$argv__UNINSTALL" -eq 1 ]]; then
@@ -140,15 +139,14 @@ Main__main()
         exit 0
     fi
     # install module
-    mkdir -p $argv__KEYCLOAK/modules/system/layers/$MODULE/$MODULE_PATH/
-    cp $JAR_PATH $argv__KEYCLOAK/modules/system/layers/$MODULE/$MODULE_PATH/
-    cp $MODULE_DIR/module.xml $argv__KEYCLOAK/modules/system/layers/$MODULE/$MODULE_PATH/
-    sed -i "s@JAR_NAME@${JAR_NAME}@g" $argv__KEYCLOAK/modules/system/layers/$MODULE/$MODULE_PATH/module.xml
-    if ! grep -q "$MODULE" "$argv__KEYCLOAK/modules/layers.conf"; then
-        sed -i "$ s/$/,$MODULE/" $argv__KEYCLOAK/modules/layers.conf
-    fi
-    # FIXME make this reentrant then test
-    xmlstarlet ed -L -N c="urn:jboss:domain:keycloak-server:1.1" -s /_:server/_:profile/c:subsystem/c:providers -t elem -n provider -v "module:$MODULE_NAME" $CONF_FILE
+    cp $JAR_PATH $argv__KEYCLOAK/providers/
+
+    # configure module
+    # add module configuration
+    add_configuration spi-health-database-health-enabled true
+    add_configuration spi-health-filesystem-health-enabled true
+    add_configuration spi-health-infinispan-health-enabled true
+    $argv__KEYCLOAK/bin/$KC_EXE build
 
     exit 0
 }
