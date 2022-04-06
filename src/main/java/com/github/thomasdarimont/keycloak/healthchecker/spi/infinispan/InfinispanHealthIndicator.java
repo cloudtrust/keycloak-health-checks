@@ -22,14 +22,17 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
 
     private static final String KEYCLOAK_CACHE_MANAGER_JNDI_NAME = "java:jboss/infinispan/container/keycloak";
 
-    InfinispanHealthIndicator(Config.Scope config) {
+    protected final String jndiName;
+
+    public InfinispanHealthIndicator(Config.Scope config) {
         super("infinispan");
+        this.jndiName = config.get("jndiName", KEYCLOAK_CACHE_MANAGER_JNDI_NAME);
     }
 
     @Override
     public HealthStatus check() {
 
-        Health infinispanHealth = lookupCacheManager().getHealth();
+    	Health infinispanHealth = getInfinispanHealth();
         ClusterHealth clusterHealth = infinispanHealth.getClusterHealth();
 
         KeycloakHealthStatus status = determineClusterHealth(clusterHealth);
@@ -42,6 +45,7 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
         }).collect(Collectors.toList());
 
         status//
+                .withAttribute("hostInfo",  infinispanHealth.getHostInfo())
                 .withAttribute("clusterName", clusterHealth.getClusterName()) //
                 .withAttribute("healthStatus", clusterHealth.getHealthStatus()) //
                 .withAttribute("numberOfNodes", clusterHealth.getNumberOfNodes()) //
@@ -50,6 +54,10 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
         ;
 
         return status;
+    }
+
+    private Health getInfinispanHealth() {
+        return lookupCacheManager().getHealth();
     }
 
     private EmbeddedCacheManager lookupCacheManager() {
@@ -69,6 +77,7 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
             case HEALTHY_REBALANCING:
                 return reportUp();
             case DEGRADED:
+            case FAILED:
                 return reportDown();
             default:
                 return reportDown();

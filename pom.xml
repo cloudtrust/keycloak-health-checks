@@ -10,7 +10,7 @@
     <parent>
         <groupId>io.cloudtrust</groupId>
         <artifactId>kc-cloudtrust-module</artifactId>
-        <version>14.0.0</version>
+        <version>17.0.1</version>
     </parent>
 
     <artifactId>keycloak-health-checks</artifactId>
@@ -21,9 +21,6 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-
-        <!-- dependency versions -->
-        <lombok.version>1.18.16</lombok.version>
 
         <keycloak.versionedArtifactName>keycloak-${keycloak.version}</keycloak.versionedArtifactName>
     </properties>
