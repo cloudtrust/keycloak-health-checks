@@ -10,6 +10,7 @@ import org.keycloak.utils.StringUtil;
 import javax.enterprise.inject.spi.CDI;
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.SQLSyntaxErrorException;
 import java.sql.Statement;
 
@@ -46,12 +47,12 @@ public class DatabaseHealthIndicator extends AbstractHealthIndicator {
         return reportDown();
     }
 
-    protected DataSource lookupDataSource() throws Exception {
+    protected DataSource lookupDataSource() {
     	// Manual lookup via CDI for Keycloak.X
     	return CDI.current().select(DataSource.class).get();
     }
 
-    protected boolean isDatabaseReady(DataSource dataSource, String healthQuery) throws Exception {
+    protected boolean isDatabaseReady(DataSource dataSource, String healthQuery) throws SQLException {
     	try (Connection connection = dataSource.getConnection()) {
             boolean valid;
             if (StringUtil.isNotBlank(healthQuery)) {
