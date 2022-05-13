@@ -6,7 +6,7 @@ import org.keycloak.Config;
 
 import java.io.File;
 
-class FilesystemHealthIndicator extends AbstractHealthIndicator {
+public class FilesystemHealthIndicator extends AbstractHealthIndicator {
 
     private static final String DEFAULT_PATH = ".";
 
@@ -16,7 +16,7 @@ class FilesystemHealthIndicator extends AbstractHealthIndicator {
 
     private final long thresholdInBytes;
 
-    FilesystemHealthIndicator(Config.Scope config) {
+    public FilesystemHealthIndicator(Config.Scope config) {
         super("filesystem");
         this.path = config.get("path", DEFAULT_PATH);
         this.thresholdInBytes = config.getLong("thresholdInBytes", DEFAULT_THRESHOLD_IN_BYTES);
@@ -25,11 +25,15 @@ class FilesystemHealthIndicator extends AbstractHealthIndicator {
     @Override
     public HealthStatus check() {
 
-        File filespace = new File(this.path);
-        long freeBytes = filespace.getFreeSpace();
+    	long freeBytes = getFreeBytesFromStore();
 
         boolean belowThreshold = freeBytes > thresholdInBytes;
 
         return (belowThreshold ? reportUp() : reportDown()).withAttribute("freebytes", freeBytes);
+    }
+
+    protected long getFreeBytesFromStore() {
+        File path = new File(this.path);
+        return path.getFreeSpace();
     }
 }

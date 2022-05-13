@@ -14,7 +14,7 @@ public class DatabaseHealthIndicatorFactory implements HealthIndicatorFactory {
 
     @Override
     public HealthIndicator create(KeycloakSession session) {
-        return new DatabaseHealthIndicator(session, config);
+        return new DatabaseHealthIndicator(config);
     }
 
     @Override
