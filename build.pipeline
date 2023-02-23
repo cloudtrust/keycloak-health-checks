@@ -1,0 +1,1 @@
+javaBuildPipeline('kc-health-checks', [[name: 'keycloak-health-checks', path:'.']], true)
