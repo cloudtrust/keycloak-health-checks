@@ -12,13 +12,13 @@
     </parent>
 
     <artifactId>keycloak-health-checks</artifactId>
-    <version>18.1.1</version>
+    <version>18.1.2-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:ssh://git@github.com/cloudtrust/keycloak-health-checks</connection>
         <developerConnection>scm:git:ssh://git@github.com/cloudtrust/keycloak-health-checks</developerConnection>
         <url>https://github.com/cloudtrust/keycloak-health-checks</url>
-        <tag>18.1.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
