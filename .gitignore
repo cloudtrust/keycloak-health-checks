@@ -42,9 +42,10 @@ nbproject
 ######################
 *.log
 
-# Maven #
+# Build #
 #########
 target
+bin/
 
 # Maven shade
 #############

@@ -8,12 +8,11 @@ import org.infinispan.health.ClusterHealth;
 import org.infinispan.health.Health;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.keycloak.Config;
-import org.keycloak.quarkus.runtime.storage.infinispan.CacheManagerFactory;
+import org.keycloak.quarkus.runtime.storage.legacy.infinispan.CacheManagerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class InfinispanHealthIndicator extends AbstractHealthIndicator {
 
@@ -38,7 +37,7 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
             item.put("cacheName", c.getCacheName());
             item.put("healthStatus", c.getStatus());
             return item;
-        }).collect(Collectors.toList());
+        }).toList();
 
         status//
                 .withAttribute("hostInfo", infinispanHealth.getHostInfo())
@@ -62,14 +61,12 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
     }
 
     private KeycloakHealthStatus determineClusterHealth(ClusterHealth clusterHealth) {
-
         switch (clusterHealth.getHealthStatus()) {
             case HEALTHY:
                 return reportUp();
             case HEALTHY_REBALANCING:
                 return reportUp();
-            case DEGRADED:
-            case FAILED:
+            case DEGRADED, FAILED:
                 return reportDown();
             default:
                 return reportDown();

@@ -11,14 +11,11 @@
             <source>install.sh</source>
             <fileMode>0755</fileMode>
         </file>
+        <file>
+            <source>module.conf</source>
+        </file>
     </files>
     <fileSets>
-        <fileSet>
-            <directory>${project.basedir}</directory>
-            <includes>
-                <include>lib-modules/**</include>
-            </includes>
-        </fileSet>
         <fileSet>
             <directory>${project.build.directory}</directory>
             <outputDirectory>target</outputDirectory>
@@ -27,4 +24,10 @@
             </includes>
         </fileSet>
     </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>target/libs</outputDirectory>
+            <includes/>
+        </dependencySet>
+    </dependencySets>
 </assembly>
