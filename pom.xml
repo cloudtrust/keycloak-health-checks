@@ -7,13 +7,13 @@
 
     <groupId>io.cloudtrust</groupId>
     <artifactId>keycloak-health-checks</artifactId>
-    <version>20.0.0-SNAPSHOT</version>
+    <version>20.0.0</version>
 
     <scm>
         <connection>scm:git:ssh://git@github.com/cloudtrust/keycloak-health-checks</connection>
         <developerConnection>scm:git:ssh://git@github.com/cloudtrust/keycloak-health-checks</developerConnection>
         <url>https://github.com/cloudtrust/keycloak-health-checks</url>
-        <tag>HEAD</tag>
+        <tag>20.0.0</tag>
     </scm>
 
     <properties>
