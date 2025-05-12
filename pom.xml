@@ -7,7 +7,7 @@
 
     <groupId>io.cloudtrust</groupId>
     <artifactId>keycloak-health-checks</artifactId>
-    <version>20.0.1-SNAPSHOT</version>
+    <version>26.0.0-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:ssh://git@github.com/cloudtrust/keycloak-health-checks</connection>
@@ -17,17 +17,18 @@
     </scm>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
-        <spotbugs.version>4.7.3.3</spotbugs.version>
-        <jacoco.version>0.8.8</jacoco.version>
-        <owasp-check.version>8.2.</owasp-check.version>
+        <spotbugs.version>4.9.3.0</spotbugs.version>
+        <jacoco.version>0.8.13</jacoco.version>
+        <owasp-check.version>12.1.1</owasp-check.version>
 
-        <keycloak.version>20.0.5</keycloak.version>
+        <keycloak.version>26.2.4</keycloak.version>
         <keycloak.versionedArtifactName>keycloak-${keycloak.version}</keycloak.versionedArtifactName>
-        <infinispan.version>13.0.10.Final</infinispan.version>
-        <cdi-api.version>2.0.2</cdi-api.version>
-        <quarkus.version>2.13.3.Final</quarkus.version>
+        <jakarta-ws.version>3.1.0</jakarta-ws.version>
+        <infinispan.version>15.0.11.Final</infinispan.version>
+        <cdi-api.version>4.1.0</cdi-api.version>
+        <quarkus.version>3.20.0</quarkus.version>
     </properties>
 
     <distributionManagement>
@@ -101,6 +102,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>${jakarta-ws.version}</version>
+        </dependency>
+        <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
             <version>${quarkus.version}</version>
@@ -142,7 +148,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>jacoco.version</version>
+                <version>${jacoco.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

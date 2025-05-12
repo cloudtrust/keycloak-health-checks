@@ -1,18 +1,20 @@
 package com.github.thomasdarimont.keycloak.healthchecker.rest;
 
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.thomasdarimont.keycloak.healthchecker.model.AggregatedHealthStatus;
 import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
 import com.github.thomasdarimont.keycloak.healthchecker.spi.GuardedHealthIndicator;
 import com.github.thomasdarimont.keycloak.healthchecker.spi.HealthIndicator;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.jboss.logging.Logger;
 import org.keycloak.models.KeycloakSession;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -20,7 +22,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class HealthCheckResource {
-
     private static final Logger LOG = Logger.getLogger(HealthCheckResource.class);
 
     public static final Response NOT_FOUND = Response.status(Response.Status.NOT_FOUND).build();
@@ -80,8 +81,7 @@ public class HealthCheckResource {
         try {
             ObjectMapper om = new ObjectMapper();
             LOG.warnf("DEGRADED Health Check: %s", om.writeValueAsString(health));
-        }
-        catch (JsonProcessingException ex) {
+        } catch (JsonProcessingException ex) {
             LOG.warn("Unexpected issue while marshalling health status to JSON");
         }
 

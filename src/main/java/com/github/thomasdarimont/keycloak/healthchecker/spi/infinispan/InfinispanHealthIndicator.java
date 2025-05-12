@@ -8,7 +8,8 @@ import org.infinispan.health.ClusterHealth;
 import org.infinispan.health.Health;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.keycloak.Config;
-import org.keycloak.quarkus.runtime.storage.legacy.infinispan.CacheManagerFactory;
+import org.keycloak.models.KeycloakSession;
+import org.keycloak.quarkus.runtime.storage.infinispan.CacheManagerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,16 +19,18 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
 
     private static final String KEYCLOAK_CACHE_MANAGER_JNDI_NAME = "java:jboss/infinispan/container/keycloak";
 
+    private KeycloakSession session;
     protected final String jndiName;
 
-    public InfinispanHealthIndicator(Config.Scope config) {
+    public InfinispanHealthIndicator(KeycloakSession session, Config.Scope config) {
         super("infinispan");
+        this.session = session;
         this.jndiName = config.get("jndiName", KEYCLOAK_CACHE_MANAGER_JNDI_NAME);
     }
 
     @Override
     public HealthStatus check() {
-    	Health infinispanHealth = getInfinispanHealth();
+        Health infinispanHealth = getInfinispanHealth();
         ClusterHealth clusterHealth = infinispanHealth.getClusterHealth();
 
         KeycloakHealthStatus status = determineClusterHealth(clusterHealth);
@@ -56,8 +59,8 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
     }
 
     private EmbeddedCacheManager lookupCacheManager() {
-    	// Manual lookup via Arc for Keycloak.X
-        return Arc.container().instance(CacheManagerFactory.class).get().getOrCreate();
+        // Manual lookup via Arc for Keycloak.X
+        return Arc.container().instance(CacheManagerFactory.class).get().getOrCreateEmbeddedCacheManager(this.session);
     }
 
     private KeycloakHealthStatus determineClusterHealth(ClusterHealth clusterHealth) {

@@ -14,7 +14,7 @@ public class InfinispanHealthIndicatorFactory implements HealthIndicatorFactory 
 
     @Override
     public HealthIndicator create(KeycloakSession session) {
-        return new InfinispanHealthIndicator(config);
+        return new InfinispanHealthIndicator(session, config);
     }
 
     @Override
