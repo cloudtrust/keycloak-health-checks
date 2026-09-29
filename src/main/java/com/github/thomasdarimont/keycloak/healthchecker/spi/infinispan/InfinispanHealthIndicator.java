@@ -3,13 +3,12 @@ package com.github.thomasdarimont.keycloak.healthchecker.spi.infinispan;
 import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
 import com.github.thomasdarimont.keycloak.healthchecker.model.KeycloakHealthStatus;
 import com.github.thomasdarimont.keycloak.healthchecker.spi.AbstractHealthIndicator;
-import io.quarkus.arc.Arc;
 import org.infinispan.health.ClusterHealth;
 import org.infinispan.health.Health;
 import org.infinispan.manager.EmbeddedCacheManager;
 import org.keycloak.Config;
+import org.keycloak.connections.infinispan.InfinispanConnectionProvider;
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.quarkus.runtime.storage.infinispan.CacheManagerFactory;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,8 +58,10 @@ public class InfinispanHealthIndicator extends AbstractHealthIndicator {
     }
 
     private EmbeddedCacheManager lookupCacheManager() {
-        // Manual lookup via Arc for Keycloak.X
-        return Arc.container().instance(CacheManagerFactory.class).get().getOrCreateEmbeddedCacheManager(this.session);
+
+        // Arc-based lookup) was removed entirely in Keycloak 26.6.4 - no replacement in that package.
+        InfinispanConnectionProvider provider = this.session.getProvider(InfinispanConnectionProvider.class);
+        return provider.getCache(InfinispanConnectionProvider.REALM_CACHE_NAME).getCacheManager();
     }
 
     private KeycloakHealthStatus determineClusterHealth(ClusterHealth clusterHealth) {
