@@ -1,7 +1,7 @@
-package com.github.thomasdarimont.keycloak.healthchecker.spi.database;
+package io.cloudtrust.keycloak.healthchecks.spi.database;
 
-import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
-import com.github.thomasdarimont.keycloak.healthchecker.spi.AbstractHealthIndicator;
+import io.cloudtrust.keycloak.healthchecks.model.HealthStatus;
+import io.cloudtrust.keycloak.healthchecks.spi.AbstractHealthIndicator;
 import jakarta.enterprise.inject.spi.CDI;
 import org.jboss.logging.Logger;
 import org.keycloak.Config;

@@ -1,4 +1,4 @@
-package com.github.thomasdarimont.keycloak.healthchecker.rest;
+package io.cloudtrust.keycloak.healthchecks.rest;
 
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.resource.RealmResourceProvider;

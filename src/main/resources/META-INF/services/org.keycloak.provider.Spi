@@ -1,1 +1,1 @@
-com.github.thomasdarimont.keycloak.healthchecker.spi.HealthIndicatorSpi
+io.cloudtrust.keycloak.healthchecks.spi.HealthIndicatorSpi

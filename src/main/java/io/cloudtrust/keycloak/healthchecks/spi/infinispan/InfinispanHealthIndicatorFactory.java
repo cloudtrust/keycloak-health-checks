@@ -1,7 +1,7 @@
-package com.github.thomasdarimont.keycloak.healthchecker.spi.infinispan;
+package io.cloudtrust.keycloak.healthchecks.spi.infinispan;
 
-import com.github.thomasdarimont.keycloak.healthchecker.spi.HealthIndicator;
-import com.github.thomasdarimont.keycloak.healthchecker.spi.HealthIndicatorFactory;
+import io.cloudtrust.keycloak.healthchecks.spi.HealthIndicator;
+import io.cloudtrust.keycloak.healthchecks.spi.HealthIndicatorFactory;
 import org.keycloak.Config;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;

@@ -1,8 +1,8 @@
-package com.github.thomasdarimont.keycloak.healthchecker.spi.infinispan;
+package io.cloudtrust.keycloak.healthchecks.spi.infinispan;
 
-import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
-import com.github.thomasdarimont.keycloak.healthchecker.model.KeycloakHealthStatus;
-import com.github.thomasdarimont.keycloak.healthchecker.spi.AbstractHealthIndicator;
+import io.cloudtrust.keycloak.healthchecks.model.HealthStatus;
+import io.cloudtrust.keycloak.healthchecks.model.KeycloakHealthStatus;
+import io.cloudtrust.keycloak.healthchecks.spi.AbstractHealthIndicator;
 import org.infinispan.health.ClusterHealth;
 import org.infinispan.health.Health;
 import org.infinispan.manager.EmbeddedCacheManager;

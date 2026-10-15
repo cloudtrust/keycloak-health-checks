@@ -1,8 +1,8 @@
-package com.github.thomasdarimont.keycloak.healthchecker.spi;
+package io.cloudtrust.keycloak.healthchecks.spi;
 
 
-import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
-import com.github.thomasdarimont.keycloak.healthchecker.model.KeycloakHealthStatus;
+import io.cloudtrust.keycloak.healthchecks.model.HealthStatus;
+import io.cloudtrust.keycloak.healthchecks.model.KeycloakHealthStatus;
 
 public class GuardedHealthIndicator implements HealthIndicator {
 
