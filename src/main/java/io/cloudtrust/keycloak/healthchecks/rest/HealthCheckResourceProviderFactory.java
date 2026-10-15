@@ -1,4 +1,4 @@
-package com.github.thomasdarimont.keycloak.healthchecker.rest;
+package io.cloudtrust.keycloak.healthchecks.rest;
 
 import org.keycloak.Config.Scope;
 import org.keycloak.models.KeycloakSession;

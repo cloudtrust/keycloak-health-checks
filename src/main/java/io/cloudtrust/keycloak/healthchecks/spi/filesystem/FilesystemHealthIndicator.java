@@ -1,7 +1,7 @@
-package com.github.thomasdarimont.keycloak.healthchecker.spi.filesystem;
+package io.cloudtrust.keycloak.healthchecks.spi.filesystem;
 
-import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
-import com.github.thomasdarimont.keycloak.healthchecker.spi.AbstractHealthIndicator;
+import io.cloudtrust.keycloak.healthchecks.model.HealthStatus;
+import io.cloudtrust.keycloak.healthchecks.spi.AbstractHealthIndicator;
 import org.keycloak.Config;
 
 import java.io.File;

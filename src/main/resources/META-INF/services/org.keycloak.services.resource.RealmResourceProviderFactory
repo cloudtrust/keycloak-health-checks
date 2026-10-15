@@ -1,1 +1,1 @@
-com.github.thomasdarimont.keycloak.healthchecker.rest.HealthCheckResourceProviderFactory
+io.cloudtrust.keycloak.healthchecks.rest.HealthCheckResourceProviderFactory

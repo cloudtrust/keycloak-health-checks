@@ -1,4 +1,4 @@
-package com.github.thomasdarimont.keycloak.healthchecker.spi;
+package io.cloudtrust.keycloak.healthchecks.spi;
 
 import org.keycloak.provider.ProviderFactory;
 

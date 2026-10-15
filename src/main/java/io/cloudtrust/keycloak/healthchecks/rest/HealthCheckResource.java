@@ -1,11 +1,11 @@
-package com.github.thomasdarimont.keycloak.healthchecker.rest;
+package io.cloudtrust.keycloak.healthchecks.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.thomasdarimont.keycloak.healthchecker.model.AggregatedHealthStatus;
-import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
-import com.github.thomasdarimont.keycloak.healthchecker.spi.GuardedHealthIndicator;
-import com.github.thomasdarimont.keycloak.healthchecker.spi.HealthIndicator;
+import io.cloudtrust.keycloak.healthchecks.model.AggregatedHealthStatus;
+import io.cloudtrust.keycloak.healthchecks.model.HealthStatus;
+import io.cloudtrust.keycloak.healthchecks.spi.GuardedHealthIndicator;
+import io.cloudtrust.keycloak.healthchecks.spi.HealthIndicator;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.Path;

@@ -1,0 +1,3 @@
+#io.cloudtrust.keycloak.healthchecks.spi.filesystem.FilesystemHealthIndicatorFactory
+io.cloudtrust.keycloak.healthchecks.spi.database.DatabaseHealthIndicatorFactory
+io.cloudtrust.keycloak.healthchecks.spi.infinispan.InfinispanHealthIndicatorFactory

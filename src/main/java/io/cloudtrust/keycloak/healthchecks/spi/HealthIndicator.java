@@ -1,6 +1,6 @@
-package com.github.thomasdarimont.keycloak.healthchecker.spi;
+package io.cloudtrust.keycloak.healthchecks.spi;
 
-import com.github.thomasdarimont.keycloak.healthchecker.model.HealthStatus;
+import io.cloudtrust.keycloak.healthchecks.model.HealthStatus;
 import org.keycloak.provider.Provider;
 
 public interface HealthIndicator extends Provider {

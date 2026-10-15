@@ -1,4 +1,4 @@
-package com.github.thomasdarimont.keycloak.healthchecker.model;
+package io.cloudtrust.keycloak.healthchecks.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
